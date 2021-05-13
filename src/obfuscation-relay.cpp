@@ -1,6 +1,9 @@
+// Copyright (c) 2014-2015 The Dash developers
+// Copyright (c) 2015-2017 The PIVX developers
+// Distributed under the MIT/X11 software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "obfuscation-relay.h"
-
 
 CObfuScationRelay::CObfuScationRelay()
 {
@@ -103,7 +106,7 @@ void CObfuScationRelay::RelayThroughNode(int nRank)
         CNode* pnode = ConnectNode((CAddress)pmn->addr, NULL, false);
         if (pnode) {
             //printf("Connected\n");
-            pnode->PushMessage("dsr", (*this));
+            pnode->PushMessage(NetMsgType::DSR, (*this));
             pnode->Release();
             return;
         }

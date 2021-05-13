@@ -173,7 +173,7 @@ public:
     class UnlockContext
     {
     public:
-        UnlockContext(WalletModel* wallet, bool valid, bool relock);
+        UnlockContext(bool valid, bool relock);
         ~UnlockContext();
 
         bool isValid() const { return valid; }
@@ -187,7 +187,6 @@ public:
         }
 
     private:
-        WalletModel* wallet;
         bool valid;
         mutable bool relock; // mutable, as it can be set to false by copying
 
@@ -197,7 +196,7 @@ public:
     UnlockContext requestUnlock(bool relock = false);
 
     bool getPubKey(const CKeyID& address, CPubKey& vchPubKeyOut) const;
-    bool isMine(CBitcoinAddress address);
+    bool isMine(CTxDestination address);
     void getOutputs(const std::vector<COutPoint>& vOutpoints, std::vector<COutput>& vOutputs);
     bool isSpent(const COutPoint& outpoint) const;
     void listCoins(std::map<QString, std::vector<COutput> >& mapCoins) const;
@@ -207,12 +206,16 @@ public:
     void unlockCoin(COutPoint& output);
     void listLockedCoins(std::vector<COutPoint>& vOutpts);
 
+    string GetUniqueWalletBackupName();
     void loadReceiveRequests(std::vector<std::string>& vReceiveRequests);
     bool saveReceiveRequest(const std::string& sAddress, const int64_t nId, const std::string& sRequest);
+    
+    OutputType getDefaultAddressType() const;
 
 private:
     CWallet* wallet;
     bool fHaveWatchOnly;
+    bool fHaveMultiSig;
     bool fForceCheckBalanceChanged;
 
     // Wallet has an options model for wallet-specific options
@@ -266,6 +269,8 @@ signals:
     // Watch-only address added
     void notifyWatchonlyChanged(bool fHaveWatchonly);
 
+    // MultiSig address added
+    void notifyMultiSigChanged(bool fHaveMultiSig);
 public slots:
     /* Wallet status might have changed */
     void updateStatus();
@@ -275,8 +280,12 @@ public slots:
     void updateAddressBook(const QString& address, const QString& label, bool isMine, const QString& purpose, int status);
     /* Watch-only added */
     void updateWatchOnlyFlag(bool fHaveWatchonly);
+    /* MultiSig added */
+    void updateMultiSigFlag(bool fHaveMultiSig);
     /* Current, immature or unconfirmed balance might have changed - emit 'balanceChanged' if so */
     void pollBalanceChanged();
+    /* Update address book labels in the database */
+    void updateAddressBookLabels(const CTxDestination& address, const string& strName, const string& strPurpose);
 };
 
 #endif // BITCOIN_QT_WALLETMODEL_H

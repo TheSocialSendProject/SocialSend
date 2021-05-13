@@ -1,4 +1,5 @@
 // Copyright (c) 2014-2015 The Dash developers
+// Copyright (c) 2015-2017 The PIVX developers
 // Copyright (c) 2015-2017 The SEND developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -32,12 +33,19 @@ class CTxBudgetPayment;
 #define VOTE_YES 1
 #define VOTE_NO 2
 
-static const CAmount PROPOSAL_FEE_TX = (50 * COIN);
-static const CAmount BUDGET_FEE_TX = (50 * COIN);
+enum class TrxValidationStatus {
+    Invalid,         /** Transaction verification failed */
+    Valid,           /** Transaction successfully verified */
+    DoublePayment,   /** Transaction successfully verified, but includes a double-budget-payment */
+    VoteThreshold    /** If not enough masternodes have voted on a finalized budget */
+};
+
 static const int64_t BUDGET_VOTE_UPDATE_MIN = 60 * 60;
 
 extern std::vector<CBudgetProposalBroadcast> vecImmatureBudgetProposals;
 extern std::vector<CFinalizedBudgetBroadcast> vecImmatureFinalizedBudgets;
+
+static map<uint256, int> mapPayment_History;
 
 extern CBudgetManager budget;
 void DumpBudgets();
@@ -48,7 +56,10 @@ void DumpBudgets();
 int GetBudgetPaymentCycleBlocks();
 
 //Check the collateral transaction for the budget proposal/finalized budget
-bool IsBudgetCollateralValid(uint256 nTxCollateralHash, uint256 nExpectedHash, std::string& strError, int64_t& nTime, int& nConf);
+bool IsBudgetCollateralValid(uint256 nTxCollateralHash, uint256 nExpectedHash, std::string& strError, int64_t& nTime, int& nConf, bool fBudgetFinalization = false);
+
+// Get the budget collateral amount for a block height
+CAmount GetBudgetSystemCollateralAmount(int nHeight);
 
 //
 // CBudgetVote - Allow a masternode node to vote and broadcast throughout the network
@@ -240,7 +251,8 @@ public:
     bool UpdateProposal(CBudgetVote& vote, CNode* pfrom, std::string& strError);
     bool UpdateFinalizedBudget(CFinalizedBudgetVote& vote, CNode* pfrom, std::string& strError);
     bool PropExists(uint256 nHash);
-    bool IsTransactionValid(const CTransaction& txNew, int nBlockHeight);
+    TrxValidationStatus IsTransactionValid(const CTransaction& txNew, int nBlockHeight);
+    bool IsPaidAlready(uint256 nProposalHash, int nBlockHeight);
     std::string GetRequiredPaymentsString(int nBlockHeight);
     void FillBlockPayee(CMutableTransaction& txNew, CAmount nFees, bool fProofOfStake);
 
@@ -344,7 +356,8 @@ public:
     int GetBlockStart() { return nBlockStart; }
     int GetBlockEnd() { return nBlockStart + (int)(vecBudgetPayments.size() - 1); }
     int GetVoteCount() { return (int)mapVotes.size(); }
-    bool IsTransactionValid(const CTransaction& txNew, int nBlockHeight);
+    bool IsPaidAlready(uint256 nProposalHash, int nBlockHeight);
+    TrxValidationStatus IsTransactionValid(const CTransaction& txNew, int nBlockHeight);
     bool GetBudgetPaymentByBlock(int64_t nBlockHeight, CTxBudgetPayment& payment)
     {
         LOCK(cs);

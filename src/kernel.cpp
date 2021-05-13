@@ -1,5 +1,6 @@
 /* @flow */
 // Copyright (c) 2012-2013 The PPCoin developers
+// Copyright (c) 2015-2017 The PIVX developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -340,8 +341,13 @@ bool CheckStakeKernelHash(unsigned int nBits, const CBlock blockFrom, const CTra
     bool fSuccess = false;
     unsigned int nTryTime = 0;
     unsigned int i;
+    int nHeightStart = chainActive.Height();
     for (i = 0; i < (nHashDrift); i++) //iterate the hashing
     {
+        //new block came in, move on
+        if (chainActive.Height() != nHeightStart)
+            break;
+
         //hash this iteration
         nTryTime = nTimeTx + nHashDrift - i;
         hashProofOfStake = stakeHash(nTryTime, ss, prevout.n, prevout.hash, nTimeBlockFrom);
@@ -390,7 +396,7 @@ bool CheckProofOfStake(const CBlock block, uint256& hashProofOfStake)
         return error("CheckProofOfStake() : INFO: read txPrev failed");
 
     //verify signature and script
-    if (!VerifyScript(txin.scriptSig, txPrev.vout[txin.prevout.n].scriptPubKey, STANDARD_SCRIPT_VERIFY_FLAGS, TransactionSignatureChecker(&tx, 0)))
+    if (!VerifyScript(txin.scriptSig, txPrev.vout[txin.prevout.n].scriptPubKey, NULL, STANDARD_SCRIPT_VERIFY_FLAGS, TransactionSignatureChecker(&tx, 0, txPrev.vout[txin.prevout.n].nValue)))
         return error("CheckProofOfStake() : VerifySignature failed on coinstake %s", tx.GetHash().ToString().c_str());
 
     CBlockIndex* pindex = NULL;

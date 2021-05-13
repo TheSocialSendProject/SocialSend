@@ -47,6 +47,7 @@ public:
         AnonymizeSendAmount, //int
         ShowMasternodesTab,  // bool
         Listen,              // bool
+        StakeSplitThreshold, // int
         OptionIDRowCount,
     };
 
@@ -58,6 +59,8 @@ public:
     bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
     /** Updates current unit in memory, settings and emits displayUnitChanged(newUnit) signal */
     void setDisplayUnit(const QVariant& value);
+    /* Update StakeSplitThreshold's value in wallet */
+    void setStakeSplitThreshold(int value);
 
     /* Explicit getters */
     bool getMinimizeToTray() { return fMinimizeToTray; }
@@ -81,6 +84,7 @@ private:
     int nDisplayUnit;
     QString strThirdPartyTxUrls;
     bool fCoinControlFeatures;
+    bool fHideZeroBalances;
     /* settings that were overriden by command-line */
     QString strOverriddenByCommandLine;
 
@@ -92,6 +96,7 @@ signals:
     void obfuscationRoundsChanged(int);
     void anonymizeSendAmountChanged(int);
     void coinControlFeaturesChanged(bool);
+    void hideZeroBalancesChanged(bool);
 };
 
 #endif // BITCOIN_QT_OPTIONSMODEL_H

@@ -162,7 +162,6 @@ qa/pull-tester/test.*/*
 /nbproject/
 
 .idea
-CMakeLists.txt
 cmake-build-debug
 src/config/send-config.h
 src/config/send-config.h.in
@@ -189,3 +188,5 @@ doc/Doxyfile
 /logs
 warrnings-error.txt
 deploy-warrnings-error.txt
+
+cache

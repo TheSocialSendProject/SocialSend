@@ -25,11 +25,11 @@
 #include "paymentserver.h"
 #include "walletmodel.h"
 #endif
-#include "masternodeconfig.h"
 
 #include "init.h"
 #include "main.h"
 #include "rpcserver.h"
+#include "scheduler.h"
 #include "ui_interface.h"
 #include "util.h"
 
@@ -186,6 +186,7 @@ signals:
 
 private:
     boost::thread_group threadGroup;
+    CScheduler scheduler;
 
     /// Flag indicating a restart
     bool execute_restart;
@@ -270,13 +271,7 @@ void BitcoinCore::initialize()
 
     try {
         qDebug() << __func__ << ": Running AppInit2 in thread";
-        int rv = AppInit2(threadGroup);
-        if (rv) {
-            /* Start a dummy RPC thread if no RPC thread is active yet
-             * to handle timeouts.
-             */
-            StartDummyRPCThread();
-        }
+        int rv = AppInit2(threadGroup, scheduler);
         emit initializeResult(rv);
     } catch (std::exception& e) {
         handleRunawayException(&e);
@@ -291,7 +286,7 @@ void BitcoinCore::restart(QStringList args)
         execute_restart = false;
         try {
             qDebug() << __func__ << ": Running Restart in thread";
-            threadGroup.interrupt_all();
+            Interrupt(threadGroup);
             threadGroup.join_all();
             PrepareShutdown();
             qDebug() << __func__ << ": Shutdown finished";
@@ -312,7 +307,7 @@ void BitcoinCore::shutdown()
 {
     try {
         qDebug() << __func__ << ": Running Shutdown in thread";
-        threadGroup.interrupt_all();
+        Interrupt(threadGroup);
         threadGroup.join_all();
         Shutdown();
         qDebug() << __func__ << ": Shutdown finished";
@@ -595,7 +590,7 @@ int main(int argc, char* argv[])
     } catch (std::exception& e) {
         QMessageBox::critical(0, QObject::tr("SEND Core"),
             QObject::tr("Error: Cannot parse configuration file: %1. Only use key=value syntax.").arg(e.what()));
-        return false;
+        return 0;
     }
 
     /// 7. Determine network (and switch to network specific options)
@@ -622,14 +617,6 @@ int main(int argc, char* argv[])
     initTranslations(qtTranslatorBase, qtTranslator, translatorBase, translator);
 
 #ifdef ENABLE_WALLET
-    /// 7a. parse masternode.conf
-    string strErr;
-    if (!masternodeConfig.read(strErr)) {
-        QMessageBox::critical(0, QObject::tr("SEND Core"),
-            QObject::tr("Error reading masternode configuration file: %1").arg(strErr.c_str()));
-        return false;
-    }
-
     /// 8. URI IPC sending
     // - Do this early as we don't want to bother initializing if we are just calling IPC
     // - Do this *after* setting up the data directory, as the data directory hash is used in the name

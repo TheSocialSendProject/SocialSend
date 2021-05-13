@@ -3,6 +3,7 @@ SEND Core integration/staging repository
 
 SEND is a cutting edge cryptocurrency, with many features not available in most other cryptocurrencies.
 - Anonymized transactions using coin mixing technology, we call it _Coin Mixing_.
+- 100% Proof of Stake 3.0 Consensus protocol, allowing very low transaction fees and energy expenditure, and staking rewards to all participants in the network
 - Fast transactions featuring guaranteed zero confirmation transactions, we call it _FastSend_.
 - Decentralized blockchain voting providing for consensus based advancement of the current Masternode technology used to secure the network and provide the above features, each Masternode is secured
 with collateral of 12,500 SEND

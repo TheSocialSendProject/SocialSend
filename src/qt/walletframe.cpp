@@ -189,6 +189,13 @@ void WalletFrame::gotoMultiSendDialog()
         walletView->gotoMultiSendDialog();
 }
 
+void WalletFrame::gotoMultisigDialog(int index)
+{
+    WalletView* walletView = currentWalletView();
+    if(walletView){
+        walletView->gotoMultisigDialog(index);
+    }
+}
 
 void WalletFrame::encryptWallet(bool status)
 {
@@ -223,6 +230,13 @@ void WalletFrame::lockWallet()
     WalletView* walletView = currentWalletView();
     if (walletView)
         walletView->lockWallet();
+}
+
+void WalletFrame::toggleLockWallet()
+{
+    WalletView* walletView = currentWalletView();
+    if (walletView)
+        walletView->toggleLockWallet();
 }
 
 void WalletFrame::usedSendingAddresses()

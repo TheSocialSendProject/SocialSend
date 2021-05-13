@@ -42,13 +42,12 @@ void BudgetListView::loadBudgets(){
 
         CTxDestination address1;
         ExtractDestination(pbudgetProposal->GetPayee(), address1);
-        CBitcoinAddress address2(address1);
 
         BudgetData data;
         data.name = QString::fromStdString(pbudgetProposal->GetName());
         data.url = QString::fromStdString(pbudgetProposal->GetURL());
         data.hash = QString::fromStdString(pbudgetProposal->GetHash().ToString());
-        data.address = QString::fromStdString( address2.ToString());
+        data.address = QString::fromStdString(EncodeDestination(address1));
         data.blockStart = pbudgetProposal->GetBlockStart();
         data.paymentCount = pbudgetProposal->GetTotalPaymentCount();
         data.remaingPayment = pbudgetProposal->GetRemainingPaymentCount();
