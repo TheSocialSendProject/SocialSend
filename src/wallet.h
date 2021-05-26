@@ -81,27 +81,6 @@ enum AvailableCoinsType {
     STAKABLE_COINS = 6                          // UTXO's that are valid for staking
 };
 
-// Possible states for zPHR send
-enum ZerocoinSpendStatus {
-    ZPHR_SPEND_OKAY = 0,                            // No error
-    ZPHR_SPEND_ERROR = 1,                           // Unspecified class of errors, more details are (hopefully) in the returning text
-    ZPHR_WALLET_LOCKED = 2,                         // Wallet was locked
-    ZPHR_COMMIT_FAILED = 3,                         // Commit failed, reset status
-    ZPHR_ERASE_SPENDS_FAILED = 4,                   // Erasing spends during reset failed
-    ZPHR_ERASE_NEW_MINTS_FAILED = 5,                // Erasing new mints during reset failed
-    ZPHR_TRX_FUNDS_PROBLEMS = 6,                    // Everything related to available funds
-    ZPHR_TRX_CREATE = 7,                            // Everything related to create the transaction
-    ZPHR_TRX_CHANGE = 8,                            // Everything related to transaction change
-    ZPHR_TXMINT_GENERAL = 9,                        // General errors in MintToTxIn
-    ZPHR_INVALID_COIN = 10,                         // Selected mint coin is not valid
-    ZPHR_FAILED_ACCUMULATOR_INITIALIZATION = 11,    // Failed to initialize witness
-    ZPHR_INVALID_WITNESS = 12,                      // Spend coin transaction did not verify
-    ZPHR_BAD_SERIALIZATION = 13,                    // Transaction verification failed
-    ZPHR_SPENT_USED_ZPHR = 14,                      // Coin has already been spend
-    ZPHR_TX_TOO_LARGE = 15,                         // The transaction is larger than the max tx size
-    ZPHR_SPEND_V1_SEC_LEVEL
-};
-
 enum OutputType : int
 {
     OUTPUT_TYPE_NONE,

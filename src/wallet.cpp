@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2012-2013 The PPCoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2017 The SEND developers
 // Distributed under the MIT software license, see the accompanying
@@ -649,10 +650,11 @@ bool CWallet::AddToWallet(const CWalletTx& wtxIn, bool fFromLoadWallet)
         wtx.BindWallet(this);
         bool fInsertedNew = ret.second;
         if (fInsertedNew) {
-            wtx.nTimeReceived = GetAdjustedTime();
+            if (!wtx.nTimeReceived)
+                wtx.nTimeReceived = GetAdjustedTime();
             wtx.nOrderPos = IncOrderPosNext();
-            if (!wtx.nTimeReceived)    
-                wtx.nTimeSmart = ComputeTimeSmart(wtx);
+            wtx.nTimeSmart = ComputeTimeSmart(wtx);
+
             AddToSpends(hash);
             
             // wqking -- fix a bug that listtransactions doesn't return recent transactions.

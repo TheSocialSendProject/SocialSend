@@ -24,6 +24,8 @@
 #include "walletmodel.h"
 #include "announcementview.h"
 #include "budgetlistview.h"
+#include "proposallist.h"
+
 #include "ui_interface.h"
 
 #include <QAction>
@@ -62,7 +64,8 @@ WalletView::WalletView(QWidget* parent) : QStackedWidget(parent),
     labelOverviewHeaderLeft->setObjectName(QStringLiteral("labelOverviewHeaderLeft"));
     labelOverviewHeaderLeft->setMinimumSize(QSize(464, 60));
     labelOverviewHeaderLeft->setMaximumSize(QSize(16777215, 60));
-    labelOverviewHeaderLeft->setText(tr("HISTORY"));
+    labelOverviewHeaderLeft->setText(tr("Transactions"));
+    labelOverviewHeaderLeft->setAlignment(Qt::AlignCenter);
     QFont fontHeaderLeft;
     fontHeaderLeft.setPointSize(20);
     fontHeaderLeft.setBold(true);
@@ -70,22 +73,22 @@ WalletView::WalletView(QWidget* parent) : QStackedWidget(parent),
     labelOverviewHeaderLeft->setFont(fontHeaderLeft);
 
     horizontalLayout_Header->addWidget(labelOverviewHeaderLeft);
-    QSpacerItem* horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-    horizontalLayout_Header->addItem(horizontalSpacer_3);
+    // QSpacerItem* horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    // horizontalLayout_Header->addItem(horizontalSpacer_3);
 
-    QLabel* labelOverviewHeaderRight = new QLabel(frame_Header);
-    labelOverviewHeaderRight->setObjectName(QStringLiteral("labelOverviewHeaderRight"));
-    labelOverviewHeaderRight->setMinimumSize(QSize(464, 60));
-    labelOverviewHeaderRight->setMaximumSize(QSize(16777215, 60));
-    labelOverviewHeaderRight->setText(QString());
-    QFont fontHeaderRight;
-    fontHeaderRight.setPointSize(14);
-    labelOverviewHeaderRight->setFont(fontHeaderRight);
-    labelOverviewHeaderRight->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+    // QLabel* labelOverviewHeaderRight = new QLabel(frame_Header);
+    // labelOverviewHeaderRight->setObjectName(QStringLiteral("labelOverviewHeaderRight"));
+    // labelOverviewHeaderRight->setMinimumSize(QSize(464, 60));
+    // labelOverviewHeaderRight->setMaximumSize(QSize(16777215, 60));
+    // labelOverviewHeaderRight->setText(QString());
+    // QFont fontHeaderRight;
+    // fontHeaderRight.setPointSize(14);
+    // labelOverviewHeaderRight->setFont(fontHeaderRight);
+    // labelOverviewHeaderRight->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-    horizontalLayout_Header->addWidget(labelOverviewHeaderRight);
-    horizontalLayout_Header->setStretch(0, 1);
-    horizontalLayout_Header->setStretch(2, 1);
+    // horizontalLayout_Header->addWidget(labelOverviewHeaderRight);
+    // horizontalLayout_Header->setStretch(0, 1);
+    // horizontalLayout_Header->setStretch(2, 1);
     verticalLayout_8->addLayout(horizontalLayout_Header);
 
     QVBoxLayout* vbox = new QVBoxLayout();
@@ -133,6 +136,11 @@ WalletView::WalletView(QWidget* parent) : QStackedWidget(parent),
         masternodeListPage = new MasternodeList();
         addWidget(masternodeListPage);
     }
+	
+    proposalListPage = new ProposalList();
+    
+    addWidget(proposalListPage);	
+	
 
     // Clicking on a transaction on the overview pre-selects the transaction on the transaction history page
     connect(overviewPage, SIGNAL(transactionClicked(QModelIndex)), transactionView, SLOT(focusTransaction(QModelIndex)));
@@ -273,6 +281,11 @@ void WalletView::gotoMasternodePage()
 void WalletView::gotoReceiveCoinsPage()
 {
     setCurrentWidget(receiveCoinsPage);
+}
+
+void WalletView::gotoProposalPage()
+{
+    setCurrentWidget(proposalListPage);
 }
 
 void WalletView::gotoSendCoinsPage(QString addr)

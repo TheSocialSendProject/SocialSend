@@ -14,7 +14,7 @@ static const int MODEL_UPDATE_DELAY = 1000;
 static const int MAX_PASSPHRASE_SIZE = 1024;
 
 /* Send GUI -- Size of icons in status bar */
-static const int STATUSBAR_ICONSIZE = 16;
+static const int STATUSBAR_ICONSIZE = 32;
 
 static const bool DEFAULT_SPLASHSCREEN = true;
 
@@ -22,7 +22,7 @@ static const bool DEFAULT_SPLASHSCREEN = true;
 #define STYLE_INVALID "background:#FF8080"
 
 /* Transaction list -- unconfirmed transaction */
-#define COLOR_UNCONFIRMED QColor(91, 76, 134)
+#define COLOR_UNCONFIRMED QColor(76, 134, 76)
 /* Transaction list -- negative amount */
 #define COLOR_NEGATIVE QColor(206, 0, 188)
 /* Transaction list -- bare address (without label) */

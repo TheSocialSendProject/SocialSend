@@ -106,12 +106,14 @@ TransactionView::TransactionView(QWidget* parent) : QWidget(parent), model(0), t
     hlayout->addWidget(typeWidget);
 
     addressWidget = new QLineEdit(this);
+    addressWidget->setAttribute(Qt::WA_MacShowFocusRect, 0);
 #if QT_VERSION >= 0x040700
     addressWidget->setPlaceholderText(tr("Enter address or label to search"));
 #endif
     hlayout->addWidget(addressWidget);
 
     amountWidget = new QLineEdit(this);
+    amountWidget->setAttribute(Qt::WA_MacShowFocusRect, 0);
 #if QT_VERSION >= 0x040700
     amountWidget->setPlaceholderText(tr("Min amount"));
 #endif
@@ -128,7 +130,10 @@ TransactionView::TransactionView(QWidget* parent) : QWidget(parent), model(0), t
     vlayout->setSpacing(0);
 
     QTableView* view = new QTableView(this);
+    view->setShowGrid(false);
     vlayout->addLayout(hlayout);
+    QSpacerItem* verticalSpacer_3 = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Preferred);
+    vlayout->addItem(verticalSpacer_3);
     vlayout->addWidget(createDateRangeWidget());
     vlayout->addWidget(view);
     vlayout->setSpacing(0);
@@ -140,7 +145,7 @@ TransactionView::TransactionView(QWidget* parent) : QWidget(parent), model(0), t
     hlayout->addSpacing(width);
 #endif
     // Always show scroll bar
-    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+   // view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     view->setTabKeyNavigation(false);
     view->setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -475,7 +480,7 @@ void TransactionView::computeSum()
         amount += index.data(TransactionTableModel::AmountRole).toLongLong();
     }
     QString strAmount(BitcoinUnits::formatWithUnit(nDisplayUnit, amount, true, BitcoinUnits::separatorAlways));
-    if (amount < 0) strAmount = "<span style='color:red;'>" + strAmount + "</span>";
+    if (amount < 0) strAmount = "<span class='negative-sum'>" + strAmount + "</span>";
     emit trxAmount(strAmount);
 }
 

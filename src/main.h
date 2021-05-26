@@ -160,7 +160,6 @@ extern int64_t nReserveBalance;
 extern std::map<uint256, int64_t> mapRejectedBlocks;
 extern std::map<unsigned int, unsigned int> mapHashedBlocks;
 extern std::set<std::pair<COutPoint, unsigned int> > setStakeSeen;
-extern std::map<uint256, int64_t> mapZerocoinspends; //txid, time received
 
 /** Best header we've seen so far (used for getheaders queries' starting points). */
 extern CBlockIndex* pindexBestHeader;
@@ -397,8 +396,8 @@ bool CheckInputs(const CTransaction& tx, CValidationState& state, const CCoinsVi
 void UpdateCoins(const CTransaction& tx, CValidationState& state, CCoinsViewCache& inputs, CTxUndo& txundo, int nHeight);
 
 /** Context-independent validity checks */
-bool CheckTransaction(const CTransaction& tx, bool fZerocoinActive, bool fRejectBadUTXO, CValidationState& state, bool fWitnessActive);
-bool RecalculatePHRSupply(int nHeightStart);
+bool CheckTransaction(const CTransaction& tx, bool fNotUsed, bool fRejectBadUTXO, CValidationState& state, bool fWitnessActive);
+bool RecalculateSendSupply(int nHeightStart);
 
 /**
  * Check if transaction will be final in the next block to be created.

@@ -1425,9 +1425,9 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
                     break;
                 }
 
-                // Recalculate money supply for blocks that are impacted by accounting issue after zerocoin activation
+                // Recalculate money supply for blocks that are impacted by accounting issue
                 if (GetBoolArg("-reindexmoneysupply", false)) {
-                    RecalculatePHRSupply(1);
+                    RecalculateSendSupply(1);
                 }
 
                 if (!fReindex) {

@@ -394,14 +394,19 @@ public:
         nMinerThreads = 0;
         nTargetTimespan = 1 * 60 * 40;  // SEND: 40 minutes
         nTargetSpacing = 1 * 60;        // SEND: 1 minute
-        nLastPOWBlock = 1001;
         nMaturity = 10;
         nMasternodeCountDrift = 20;
-        nModifierUpdateBlock = 615800;
         nMaxMoneyOut = 65000000 * COIN;
+
+        /** Height or Time Based Activations **/
+        nLastPOWBlock = 1001;
+
+        nModifierUpdateBlock = 615800;
+
         nNewMasternodeReward_StartBlock = 385000;
         nNewMasternodeReward_Collateral = 12500;
         nNewMasternodeReward_MNPercent = 75.0 / 100.0;
+
         /**
          * Build the genesis block. Note that the output of the genesis coinbase cannot
          * be spent as it did not originally exist in the database.
@@ -540,7 +545,7 @@ public:
         nTargetSpacing = 1 * 60;        // SEND: 1 minute
         nMaturity = 15;
         nMasternodeCountDrift = 4;
-        nModifierUpdateBlock = 51197; //approx Mon, 17 Apr 2017 04:00:00 GMT
+        nModifierUpdateBlock = 1; //approx Mon, 17 Apr 2017 04:00:00 GMT
         nMaxMoneyOut = 43199500 * COIN;
         nLastPOWBlock = 200;
 

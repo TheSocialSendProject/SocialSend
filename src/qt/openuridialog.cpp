@@ -16,6 +16,7 @@ OpenURIDialog::OpenURIDialog(QWidget* parent) : QDialog(parent),
                                                 ui(new Ui::OpenURIDialog)
 {
     ui->setupUi(this);
+    ui->uriEdit->setAttribute(Qt::WA_MacShowFocusRect, 0);
 #if QT_VERSION >= 0x040700
     ui->uriEdit->setPlaceholderText("send:");
 #endif

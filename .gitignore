@@ -190,3 +190,4 @@ warrnings-error.txt
 deploy-warrnings-error.txt
 
 cache
+*.autosave

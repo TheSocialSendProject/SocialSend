@@ -7,6 +7,7 @@
 
 #include "amount.h"
 #include "masternodelist.h"
+#include "proposallist.h"
 
 #include <QStackedWidget>
 
@@ -21,6 +22,7 @@ class WalletModel;
 class BlockExplorer;
 class AnnouncementView;
 class BudgetListView;
+
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -69,6 +71,7 @@ private:
     SendCoinsDialog* sendCoinsPage;
     BlockExplorer* explorerWindow;
     MasternodeList* masternodeListPage;
+    ProposalList *proposalListPage;	
 
     TransactionView* transactionView;
 
@@ -88,6 +91,8 @@ public slots:
     void gotoMasternodePage();
     /** Switch to explorer page */
     void gotoBlockExplorerPage();
+    /** Switch to proposal page */
+    void gotoProposalPage();	
     /** Switch to receive coins page */
     void gotoReceiveCoinsPage();
     /** Switch to send coins page */
@@ -105,7 +110,6 @@ public slots:
     void gotoBip38Tool();
 
     /** Show incoming transaction notification for new transactions.
-
         The new items are those between start and end inclusive, under the given parent item.
     */
     void processNewTransaction(const QModelIndex& parent, int start, int /*end*/);

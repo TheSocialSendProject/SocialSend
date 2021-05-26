@@ -20,6 +20,11 @@ MultiSendDialog::MultiSendDialog(QWidget* parent) : QDialog(parent),
 {
     ui->setupUi(this);
 
+    ui->multiSendPercentEdit->setAttribute(Qt::WA_MacShowFocusRect, 0);
+    ui->multiSendAddressEdit->setAttribute(Qt::WA_MacShowFocusRect, 0);
+    ui->labelAddressLabelEdit->setAttribute(Qt::WA_MacShowFocusRect, 0);
+    
+
     updateCheckBoxes();
 }
 
